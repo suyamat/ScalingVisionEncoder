@@ -1,0 +1,3 @@
+himayala
+python-dotenv
+torch
