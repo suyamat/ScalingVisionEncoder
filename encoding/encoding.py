@@ -9,7 +9,11 @@ from himalaya.backend import set_backend
 
 backend = set_backend("torch_cuda", on_error="warn")
 
-def encoder(stim: np.ndarray, resp: np.ndarray) -> np.ndarray:
+def encoder(
+    stim: np.ndarray, 
+    resp: np.ndarray, 
+    return_model: bool
+) -> tuple([np.ndarray, object]):
     
     ncv = 8
     alphas = np.logspace(0, 15, 30)
@@ -34,5 +38,9 @@ def encoder(stim: np.ndarray, resp: np.ndarray) -> np.ndarray:
     scores = ridge.cv_scores_
     scores = backend.to_numpy(scores)
     print(f"Mean cv scores: {np.mean(scores)}")
-
-    return scores
+    
+    if return_model==True:
+        return scores, ridge
+    
+    else:
+        return scores, None

@@ -78,7 +78,7 @@ def inference(
     spatial_res = model_spatial_res[model_name]
     
     if subject_name == "all":
-        subject_name = [f"subj{num.zfill(str(s))}" for s in range(1, 9)]
+        subject_name = [f"subj{str(s).zfill(2)}" for s in range(1, 9)]
     else:
         subject_name = [subject_name]
 

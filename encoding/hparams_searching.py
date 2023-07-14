@@ -59,17 +59,17 @@ def searcher(
 
             for l in range(layer_start, layer_end+1, layer_step):
                 best_scores[hemisphere][f'layer{l}'] = {}
+                stim = np.load(f"{features_path}/{model_name}/{sub}/training/layer{l}.npy")
+                stim = stim[:use_samples]
+                stim = stim.astype('float32')
+                stim = torch.from_numpy(stim)
                 for k in range(kernel_start, kernel_end+1, kernel_step):
                     print(f"layer{l}, kernel{k}")
-                    stim = np.load(f"{features_path}/{model_name}/{sub}/training/layer{l}.npy")
-                    stim = stim[:use_samples]
-                    stim = stim.astype('float32')
                     pooling = nn.AdaptiveMaxPool2d((k, k))
-                    stim = torch.from_numpy(stim)
-                    stim = pooling(stim)
-                    stim = stim.reshape(stim.shape[0], -1)
-                    stim = stim.to('cpu').detach().numpy()
-                    res = encoder(stim=stim, resp=resp)
+                    pooled_stim = pooling(stim)
+                    pooled_stim = pooled_stim.reshape(pooled_stim.shape[0], -1)
+                    pooled_stim = pooled_stim.to('cpu').detach().numpy()
+                    res = encoder(stim=pooled_stim, resp=resp)
                     best_scores[hemisphere][f'layer{l}'][f'kernel{k}'] = res
             
         save_dir = f"{save_path}/results/alg_params/{model_name}/{sub}"

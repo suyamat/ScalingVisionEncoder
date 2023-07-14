@@ -124,60 +124,19 @@ def get_args():
 
 def define_model(model_name, depth) -> object:
     
-    if model_name == 'eva02-clip':
-        args = get_args()
-        args.model = 'eva02_enormous_patch14_clip_224.laion2b_plus'
-        args.pretrained = args.pretrained or not args.checkpoint
-        if torch.cuda.is_available():
-            torch.backends.cuda.matmul.allow_tf32 = True
-            torch.backends.cudnn.benchmark = True
-
-        # resolve AMP arguments based on PyTorch / Apex availability
-        amp_autocast = suppress
-        if args.amp:
-            assert has_native_amp, 'Please update PyTorch to a version with native AMP (or use APEX).'
-            assert args.amp_dtype in ('float16', 'bfloat16')
-            amp_dtype = torch.bfloat16 if args.amp_dtype == 'bfloat16' else torch.float16
-            amp_autocast = partial(torch.autocast, device_type=device.type, dtype=amp_dtype)
-            _logger.info('Running inference in mixed precision with native PyTorch AMP.')
-        else:
-            _logger.info('Running inference in float32. AMP not enabled.')
-
-        if args.fuser:
-            set_jit_fuser(args.fuser)
-
-        # create model
-        in_chans = 3
-        if args.in_chans is not None:
-            in_chans = args.in_chans
-        elif args.input_size is not None:
-            in_chans = args.input_size[0]
-        model = create_model(
-                        args.model,
-                        num_classes=args.num_classes,
-                        in_chans=in_chans,
-                        pretrained=args.pretrained,
-                        checkpoint_path=args.checkpoint,
-                        extracting_depth=depth,
-                        **args.model_kwargs,
-                    )
-        if args.num_classes is None:
-            assert hasattr(model, 'num_classes'), 'Model must have `num_classes` attr if not set on cmd line/config.'
-            args.num_classes = model.num_classes
-
-        _logger.info(
-            f'Model {args.model} created, param count: {sum([m.numel() for m in model.parameters()])}')
-
-        data_config = resolve_data_config(vars(args), model=model)
-        test_time_pool = False
-        if args.test_pool:
-            model, test_time_pool = apply_test_time_pool(model, data_config)
+    if "eva" in model_name:
+        if model_name == "eva02-clip-enormous":
+            args = get_args()
+            args.model = "eva02_enormous_patch14_clip_224.laion2b_plus"
+        elif model_name == "eva02-clip-large":
+            args.model = "eva02_large_patch14_clip_224.merged2b"
         
-        return model
-    
-    elif model_name == 'eva-g':
-        args = get_args()
-        args.model = 'eva_giant_patch14_336.m30m_ft_in22k_in1k'
+        elif model_name == "eva02-clip-base":
+            args.model = "eva02_base_patch16_clip_224.merged2b"
+        
+        else:
+            raise AssertionError(f"Image Bind is in preparation.")
+        
         args.pretrained = args.pretrained or not args.checkpoint
         if torch.cuda.is_available():
             torch.backends.cuda.matmul.allow_tf32 = True
@@ -280,4 +239,4 @@ def define_model(model_name, depth) -> object:
     elif model_name=='imagebind':
         raise AssertionError(f"Image Bind is in preparation.")
     else:
-        raise AssertionError(f"Model name '{model_name}' does not exit!")
+        raise AssertionError(f"Model name '{model_name}' does not exit")
