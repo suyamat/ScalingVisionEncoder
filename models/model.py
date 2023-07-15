@@ -125,15 +125,19 @@ def get_args():
 def define_model(model_name, depth) -> object:
     
     if "eva" in model_name:
+        args = get_args()
         if model_name == "eva02-clip-enormous":
-            args = get_args()
             args.model = "eva02_enormous_patch14_clip_224.laion2b_plus"
+            
         elif model_name == "eva02-clip-large":
             args.model = "eva02_large_patch14_clip_224.merged2b"
         
         elif model_name == "eva02-clip-base":
             args.model = "eva02_base_patch16_clip_224.merged2b"
         
+        elif model_name == "eva-clip-giant":
+            args.model = "eva_giant_patch14_clip_224.merged2b"
+            
         else:
             raise AssertionError(f"Image Bind is in preparation.")
         

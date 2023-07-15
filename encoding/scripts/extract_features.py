@@ -6,12 +6,12 @@ from encoding import extracting
 
 """
 python -m encoding.scripts.extract_features \
-    --model_name "eva02-clip" \
-    --subject_name "subj01" \
+    --model_name "eva-clip-giant" \
+    --subject_name "all" \
     --n_device "4" \
+    --batch_size "512" \
     --resp_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023" \
-    --batch_size "256" \
-    --save_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023/test"
+    --save_path "/mount/nfs3/matsuyama-takuya/dataset/alg2023"
 
 """
 
@@ -22,8 +22,8 @@ def main(args):
         args.model_name,
         args.subject_name,
         args.n_device,
-        args.resp_path,
         args.batch_size,
+        args.resp_path,
         args.save_path
     )
     
@@ -55,6 +55,13 @@ if __name__ == "__main__":
         required=True, 
         help="Number of gpu device.",
     )
+
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        required=True, 
+        help="Batch size for inference.",
+    )
     
     parser.add_argument(
         "--resp_path",
@@ -64,17 +71,11 @@ if __name__ == "__main__":
     )
     
     parser.add_argument(
-        "--batch_size",
-        type=int,
-        required=True, 
-        help="Batch size for inference.",
-    )
-    
-    parser.add_argument(
         "--save_path",
         type=str,
         required=True, 
         help="Name of the save directory.",
     )
+    
 
     main(parser.parse_args())

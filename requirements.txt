@@ -1,3 +1,5 @@
 himayala
 python-dotenv
 torch
+matplotlib
+seaborn

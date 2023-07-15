@@ -40,22 +40,28 @@ TF = transforms.Compose([
 ])
 
 model_layer = {
-    "eva02-clip": 64,
-    "eva-g": 40,
+    "eva02-clip-enormous": 64,
+    "eva02-clip-large": 24,
+    "eva02-clip-base": 12,
+    "eva-clip-giant": 40,
     "clip-convnext": 40,
     "ONE-PEACE": 40,
 }
 
 model_img_size = {
-    "eva02-clip": 224,
-    "eva-g": 224,
+    "eva02-clip-enormous": 224,
+    "eva02-clip-large": 224,
+    "eva02-clip-base": 224,
+    "eva-clip-giant": 224,
     "clip-convnext": 256,
     "ONE-PEACE": 256,
 }
 
 model_spatial_res = {
-    "eva02-clip": 16,
-    "eva-g": 24,
+    "eva02-clip-enormous": 16,
+    "eva02-clip-large": 16,
+    "eva02-clip-base": 14,
+    "eva-clip-giant": 16,
     "clip-convnext": 24,
     "ONE-PEACE": 16,
 }
@@ -65,8 +71,8 @@ def inference(
     model_name: str,
     subject_name: str,
     n_device: int,
-    resp_path: str,
     batch_size: int,
+    resp_path: str,
     save_path: str
     
 ) -> None:
@@ -91,8 +97,8 @@ def inference(
             files = sorted(files)
             all_im = []
             for i, im_path in enumerate(files):
-                if i==256:
-                    break
+                # if i==256:
+                #     break
                 im = Image.open(im_path)
                 im = TF(im)
                 all_im.append(im)
