@@ -2,6 +2,7 @@ import argparse
 import logging
 from contextlib import suppress
 from functools import partial
+import sys
 import torch
 
 from models.timm.data import resolve_data_config
@@ -239,6 +240,27 @@ def define_model(model_name, depth) -> object:
             model, test_time_pool = apply_test_time_pool(model, data_config)
         
         return model
+
+    elif model_name=='InternImage':
+            from models.InternImage.classification.models import build_model
+            import yaml
+            from attrdict import AttrDict
+            
+            with open('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/InternImage/classification/configs/internimage_g_22kto1k_384.yaml') as f:
+                config = yaml.safe_load(f.read())
+            config = AttrDict(config)
+            print(config)
+            model = build_model(config)
+            checkpoint = torch.load("/mount/nfs6/takuyamatsuyama/data/checkpoint/internimage_g_pretrainto22k_384.pth", map_location='cpu')
+            model.load_state_dict(checkpoint['model'], strict=False)
+            model.cuda()
+            print(model)
+            
+    elif model_name=='ONE-PEACE':
+        sys.path.append('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/ONE-PEACE')
+        from one_peace.models import from_pretrained
+
+        model = from_pretrained("ONE-PEACE", device='cuda:0', dtype="float32")
 
     elif model_name=='imagebind':
         raise AssertionError(f"Image Bind is in preparation.")
