@@ -255,6 +255,12 @@ def define_model(model_name, depth) -> object:
             model.load_state_dict(checkpoint['model'], strict=False)
             model.cuda()
             print(model)
+            
+    elif model_name=='ONE-PEACE':
+        sys.path.append('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/ONE-PEACE')
+        from one_peace.models import from_pretrained
+
+        model = from_pretrained("ONE-PEACE", device='cuda:0', dtype="float32")
 
     elif model_name=='imagebind':
         raise AssertionError(f"Image Bind is in preparation.")
