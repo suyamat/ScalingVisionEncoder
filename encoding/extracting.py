@@ -46,6 +46,7 @@ model_layer = {
     "eva-clip-giant": 40,
     "clip-convnext": 40,
     "ONE-PEACE": 40,
+    "InternImage": 52
 }
 
 model_img_size = {
@@ -55,6 +56,7 @@ model_img_size = {
     "eva-clip-giant": 224,
     "clip-convnext": 256,
     "ONE-PEACE": 256,
+    "InternImage": 512
 }
 
 model_spatial_res = {
@@ -62,14 +64,16 @@ model_spatial_res = {
     "eva02-clip-large": 16,
     "eva02-clip-base": 14,
     "eva-clip-giant": 16,
-    "clip-convnext": 24,
+    "clip-convnext": None,
     "ONE-PEACE": 16,
+    "InternImage": None
 }
 
 
 def inference(
     model_name: str,
     subject_name: str,
+    skip: int,
     n_device: int,
     batch_size: int,
     resp_path: str,
@@ -107,8 +111,8 @@ def inference(
             im_dataset = torch.utils.data.TensorDataset(all_im)
             im_loader = torch.utils.data.DataLoader(im_dataset, batch_size=batch_size, shuffle=False)
 
-            for l in range(layer):
-                print(f"Extracting features from layer{l}")
+            for l in range(0, layer, skip):
+                print(f"Extracting features from layer{l+1}")
                 model = define_model(model_name=model_name, depth=l)
                 model = nn.DataParallel(model, device_ids=[i for i in range(n_device)])
                 model = model.to(device)
@@ -119,9 +123,13 @@ def inference(
                     for i, img in enumerate(tqdm(im_loader)):
                         img = torch.tensor(img[0], device=device)
                         pred = model(img) #[:, 1:] #[B, S, C] = [64, 24x24, 1408]
-
+                
                         if model_name == "clip-convnext":
                             m = nn.AdaptiveMaxPool2d((21, 21))
+                            pred = m(pred)
+                        if model_name == "InternImage":
+                            m = nn.AdaptiveMaxPool2d((14, 14))
+                            pred = pred.permute(0, 3, 1, 2)
                             pred = m(pred)
                         else:
                             pred = pred[:, 1:, :]
@@ -136,6 +144,6 @@ def inference(
                 os.makedirs(save_dir, exist_ok=True)
                 np.save(f'{save_dir}/layer{l+1}.npy', preds)
 
-                del pred
+                del pred, model
                 gc.collect()
                 torch.cuda.empty_cache()

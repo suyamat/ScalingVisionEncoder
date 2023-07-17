@@ -245,16 +245,25 @@ def define_model(model_name, depth) -> object:
             from models.InternImage.classification.models import build_model
             import yaml
             from attrdict import AttrDict
+            from models.InternImage.classification import config
             
-            with open('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/InternImage/classification/configs/internimage_g_22kto1k_384.yaml') as f:
-                config = yaml.safe_load(f.read())
-            config = AttrDict(config)
-            print(config)
-            model = build_model(config)
-            checkpoint = torch.load("/mount/nfs6/takuyamatsuyama/data/checkpoint/internimage_g_pretrainto22k_384.pth", map_location='cpu')
+            
+            cfg = config.get_config(None)
+            cfg.TRAIN.USE_CHECKPOINT = True
+            cfg.MODEL.PRETRAINED = True
+            cfg.MODEL.TYPE = "intern_image"
+            cfg.EXTRACT_LAYER = depth
+            config_file = "models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml"
+            config._update_config_from_file(cfg, config_file)
+            # with open('models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml') as f:
+            #     config = yaml.safe_load(f.read())
+            cfg = AttrDict(cfg)
+            print(cfg)
+            model = build_model(cfg)
+            checkpoint = torch.load("./data/checkpoints/internimage_g_22kto1k_512.pth", map_location='cpu')
             model.load_state_dict(checkpoint['model'], strict=False)
             model.cuda()
-            print(model)
+            return model
             
     elif model_name=='ONE-PEACE':
         sys.path.append('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/ONE-PEACE')

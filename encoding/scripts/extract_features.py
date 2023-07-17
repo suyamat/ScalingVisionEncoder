@@ -6,12 +6,13 @@ from encoding import extracting
 
 """
 python -m encoding.scripts.extract_features \
-    --model_name "eva-clip-giant" \
+    --model_name "InternImage" \
     --subject_name "all" \
+    --skip "2" \
     --n_device "4" \
-    --batch_size "512" \
+    --batch_size "16" \
     --resp_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023" \
-    --save_path "/mount/nfs3/matsuyama-takuya/dataset/alg2023"
+    --save_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023"
 
 """
 
@@ -21,6 +22,7 @@ def main(args):
     extracting.inference(
         args.model_name,
         args.subject_name,
+        args.skip,
         args.n_device,
         args.batch_size,
         args.resp_path,
@@ -47,6 +49,13 @@ if __name__ == "__main__":
         type=str,
         required=True,
         help="Name of the subject to train the model on. If you set.",
+    )
+
+    parser.add_argument(
+        "--skip",
+        type=int,
+        required=True,
+        help="Number of layer skip.",
     )
 
     parser.add_argument(
