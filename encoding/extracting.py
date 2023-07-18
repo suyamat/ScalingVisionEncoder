@@ -92,8 +92,10 @@ def inference(
     else:
         subject_name = [subject_name]
 
-    for sub in subject_name:
+    for sub_idx, sub in enumerate(subject_name):
         print(f"Using {sub}'s response data...")
+        if sub_idx < 5:
+            continue
         
         for split in ["training", "test"]:
             print(f"Split: {split}")
