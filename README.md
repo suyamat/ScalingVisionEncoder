@@ -1,5 +1,5 @@
 # Applicability of scaling laws to vision encoding models
-This repository provides codes for solving Algonaut Project 2023 Challenge. For more information, see the our solution paper and Algonatus Project 2023 page.
+This repository provides codes for solving Algonauts Project 2023 Challenge. For more information, see the our solution paper and Algonauts Project 2023 page.
 
 [[Our paper](https://arxiv.org/abs/2308.00678)]
 [[Challenge website](http://algonauts.csail.mit.edu/)]
