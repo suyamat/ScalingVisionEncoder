@@ -7,8 +7,9 @@ This repository provides codes for solving Algonaut Project 2023 Challenge. For 
 1. ``git clone https://github.com/suyamat/ScalingVisionEncoder``
 2. ``cd ScalingVisionEncoder``
 3. ``conda create -n scaling_vis_enc python==3.8``
-4. ``pip insall -r requirements.txt``
-5. ``echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ``
+4. ``conda activate scaling_vis_enc``
+5. ``pip insall -r requirements.txt``
+6. ``echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ``
 
 # Usage
 Comming soon ...
