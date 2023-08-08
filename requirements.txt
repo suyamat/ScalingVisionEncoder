@@ -1,5 +1,9 @@
 himayala
 python-dotenv
-torch
+torch==1.11.0
+scikit-learn
+numpy
+timm
+tqdm
 matplotlib
 seaborn
