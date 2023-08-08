@@ -1,1 +1,3 @@
 data/**
+encoding/__pycache__/**
+models/__pycache__/**
