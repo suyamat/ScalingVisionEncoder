@@ -8,6 +8,7 @@ from himalaya.kernel_ridge import KernelRidgeCV
 from himalaya.ridge import RidgeCV
 from himalaya.scoring import correlation_score
 from himalaya.backend import set_backend
+import gc
 
 from encoding.encoding import encoder
 
@@ -23,9 +24,6 @@ def searcher(
     kernel_step: int,
     kernel_end: int,
     use_ratio: float,
-    features_path: str,
-    resp_path: str,
-    save_path: str,
 ) -> None:
 
     model_layer = {
@@ -40,7 +38,7 @@ def searcher(
     print(f"Pooling setting: Start size={kernel_start}, End size = {kernel_end}, Step size = {kernel_step}")
 
     if subject_name == "all":
-        subject_name = [f"subj{num.zfill(str(s))}" for s in range(1, 9)]
+        subject_name = [f"subj{str(s).zfill(2)}" for s in range(1, 9)]
     else:
         subject_name = [subject_name]
         
@@ -49,7 +47,7 @@ def searcher(
         for hemisphere in ['lh', 'rh']:
             print(f"Using {sub}'s {hemisphere} response data...")
             best_scores[hemisphere] = {}
-            resp = np.load(f"{resp_path}/{sub}/training_split/training_fmri/{hemisphere}_training_fmri.npy")
+            resp = np.load(f"./data/resp/{sub}/training_split/training_fmri/{hemisphere}_training_fmri.npy")
             n_samples = resp.shape[0]
             use_samples = int(n_samples * use_ratio)
             resp = resp[:use_samples]
@@ -59,7 +57,7 @@ def searcher(
 
             for l in range(layer_start, layer_end+1, layer_step):
                 best_scores[hemisphere][f'layer{l}'] = {}
-                stim = np.load(f"{features_path}/{model_name}/{sub}/training/layer{l}.npy")
+                stim = np.load(f"./data/features/{model_name}/{sub}/training/layer{l}.npy")
                 stim = stim[:use_samples]
                 stim = stim.astype('float32')
                 stim = torch.from_numpy(stim)
@@ -69,9 +67,14 @@ def searcher(
                     pooled_stim = pooling(stim)
                     pooled_stim = pooled_stim.reshape(pooled_stim.shape[0], -1)
                     pooled_stim = pooled_stim.to('cpu').detach().numpy()
-                    res = encoder(stim=pooled_stim, resp=resp)
+                    res, _ = encoder(stim=pooled_stim, resp=resp, return_model=False)
                     best_scores[hemisphere][f'layer{l}'][f'kernel{k}'] = res
+                    
+                    del pooled_stim, res
+                    gc.collect()
+                    torch.cuda.empty_cache()
+                    
             
-        save_dir = f"{save_path}/results/alg_params/{model_name}/{sub}"
+        save_dir = f"./data/results/hparams/{model_name}/{sub}"
         os.makedirs(save_dir, exist_ok=True)
         np.save(f"{save_dir}/hparams_score.npy", best_scores)

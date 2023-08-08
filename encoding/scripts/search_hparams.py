@@ -1,17 +1,14 @@
 """
-python -m encoding.scripts.hparams_search \
-    --model_name "eva02-clip" \
-    --subject_name "subj01" \
+python -m encoding.scripts.search_hparams \
+    --model_name "eva02-clip-large" \
+    --subject_name "all" \
     --layer_start "1" \
     --layer_step "1" \
-    --layer_end "2" \
+    --layer_end "12" \
     --kernel_start "1" \
     --kernel_step "1" \
-    --kernel_end "2" \
-    --use_ratio "0.5" \
-    --features_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023/features" \
-    --resp_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023" \
-    --save_path "/mount/nfs5/matsuyama-takuya/dataset/alg2023/test"
+    --kernel_end "14" \
+    --use_ratio "0.6"
 """
 
 import argparse
@@ -24,8 +21,7 @@ def main(args):
     
     hparams_searching.searcher(
         args.model_name, args.subject_name, args.layer_start, args.layer_step,
-        args.layer_end, args.kernel_start, args.kernel_step, args.kernel_end,
-        args.use_ratio, args.features_path, args.resp_path, args.save_path
+        args.layer_end, args.kernel_start, args.kernel_step, args.kernel_end, args.use_ratio
     )
     
 
@@ -103,27 +99,5 @@ if __name__ == "__main__":
         default=1.0,
         help="Ratio of using sample size.",
     )
-
-    parser.add_argument(
-        "--features_path",
-        type=str,
-        required=True, 
-        help="Path of your brain response data's directory.",
-    )
-
-    parser.add_argument(
-        "--resp_path",
-        type=str,
-        required=True, 
-        help="Path of your brain response data's directory.",
-    )
-    
-    parser.add_argument(
-        "--save_path",
-        type=str,
-        required=True, 
-        help="Name of the save directory.",
-    )
-
 
     main(parser.parse_args())

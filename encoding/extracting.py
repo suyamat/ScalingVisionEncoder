@@ -76,8 +76,6 @@ def inference(
     skip: int,
     n_device: int,
     batch_size: int,
-    resp_path: str,
-    save_path: str
     
 ) -> None:
     
@@ -94,12 +92,12 @@ def inference(
 
     for sub_idx, sub in enumerate(subject_name):
         print(f"Using {sub}'s response data...")
-        if sub_idx < 5:
+        if sub_idx < 2:
             continue
         
-        for split in ["training", "test"]:
+        for split in ["test"]:
             print(f"Split: {split}")
-            files = glob.glob(f"{resp_path}/{sub}/{split}_split/{split}_img_{img_size}px/*")
+            files = glob.glob(f"data/resp/{sub}/{split}_split/{split}_img_{img_size}px/*")
             files = sorted(files)
             all_im = []
             for i, im_path in enumerate(files):
@@ -133,6 +131,11 @@ def inference(
                             m = nn.AdaptiveMaxPool2d((14, 14))
                             pred = pred.permute(0, 3, 1, 2)
                             pred = m(pred)
+                        if model_name == "ONE-PEACE":
+                            pred = model.extract_image_features(img)
+                            pred = pred[l][1:, ...]
+                            pred = pred.reshape(16, 16, pred.shape[1], -1)
+                            pred = pred.permute(2, 3, 0, 1)
                         else:
                             pred = pred[:, 1:, :]
                             pred = pred.reshape(pred.shape[0], spatial_res, spatial_res, -1)
@@ -142,10 +145,11 @@ def inference(
                         preds.append(pred)
 
                 preds = np.array(list(itertools.chain.from_iterable(preds)))
-                save_dir = f"{save_path}/features/{model_name}/{sub}/{split}"
+                save_dir = f"./data/features/{model_name}/{sub}/{split}"
                 os.makedirs(save_dir, exist_ok=True)
                 np.save(f'{save_dir}/layer{l+1}.npy', preds)
 
                 del pred, model
                 gc.collect()
                 torch.cuda.empty_cache()
+  
