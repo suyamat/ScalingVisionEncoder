@@ -2,7 +2,6 @@ import argparse
 import logging
 from contextlib import suppress
 from functools import partial
-import sys
 import torch
 
 from models.timm.data import resolve_data_config
@@ -269,6 +268,8 @@ def define_model(model_name, depth) -> object:
         from models.ONE-PEACE.one_peace import models 
 
         model = models.from_pretrained("ONE-PEACE", device='cuda:0', dtype="float32")
+
+        return model
 
     elif model_name=='ImageBind':
         raise AssertionError(f"Image Bind is in preparation.")

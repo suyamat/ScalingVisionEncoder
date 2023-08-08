@@ -1,11 +1,63 @@
 # Applicability of scaling laws to vision encoding models
-This repository provides codes for solving The Algonauts Project 2023 Challenge. For more information, see the our solution paper and The Algonauts Project 2023 page.
+This repository provides codes for solving The Algonauts Project 2023 Challenge. For more information, see our solution paper and the challenge's page.
 
 [[Our paper](https://arxiv.org/abs/2308.00678)]
 [[Challenge website](http://algonauts.csail.mit.edu/)]
 
+# Support models
 
-# Support model
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-baqh" align="center" rowspan="2">model</th>
+    <th class="tg-0lax" align="center" rowspan="2">Size name</th>
+    <th class="tg-baqh" align="center" rowspan="2">Num. of paremeters</th>
+    <th class="tg-0lax" align="center" rowspan="2">Link</th>
+  </tr>
+  <tr>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-baqh" align="center">EVA01-CLIP</td>
+    <td class="tg-0lax" align="center">huge
+    <td class="tg-baqh" align="center">1.0B</td>
+    <td class="tg-0lax" align="center" rowspan="4"><a href="https://arxiv.org/abs/2303.15389">Paper</a></td>
+  </tr>
+  <tr>
+  <td class="tg-baqh" align="center" rowspan="3">EVA02-CLIP</td>
+  <td class="tg-0lax" align="center">base
+  <td class="tg-baqh" align="center">0.086B </td>
+  </tr>
+  <tr>
+  <td class="tg-0lax" align="center">large
+  <td class="tg-baqh" align="center">0.3B </td>
+  </tr>
+  <tr>
+  <td class="tg-0lax" align="center">enormous
+  <td class="tg-baqh" align="center">4.4B </td>
+  </tr>
+  <tr>
+    <td class="tg-baqh" align="center">ConvNext</td>
+    <td class="tg-0lax" align="center">xxlarge
+    <td class="tg-baqh" align="center">0.85B</td>
+    <td class="tg-0lax" align="center"><a href="https://arxiv.org/abs/2201.03545">Paper</a></td>
+  </tr>
+  <tr>
+    <td class="tg-baqh" align="center">ONE-PEACE</td>
+    <td class="tg-0lax" align="center">N / A
+    <td class="tg-baqh" align="center">1.5B</td>
+    <td class="tg-0lax" align="center"><a href="https://arxiv.org/abs/2305.11172">Paper</a></td>
+  </tr>
+  <tr>
+    <td class="tg-baqh" align="center">InternImage</td>
+    <td class="tg-0lax" align="center">giant
+    <td class="tg-baqh" align="center">3.0B</td>
+    <td class="tg-0lax" align="center"><a href="https://arxiv.org/abs/2211.05778">Paper</a></td>
+  </tr>
+</tbody>
+</table>
+
 
 # Installation
 1. ```git clone https://github.com/suyamat/ScalingVisionEncoder```
