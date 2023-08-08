@@ -4,8 +4,8 @@ This repository provides codes for solving The Algonauts Project 2023 Challenge.
 [[Our paper](https://arxiv.org/abs/2308.00678)]
 [[Challenge website](http://algonauts.csail.mit.edu/)]
 
-# Support model
 
+# Support model
 
 # Installation
 1. ```git clone https://github.com/suyamat/ScalingVisionEncoder```
@@ -52,6 +52,14 @@ python -m encoding.scripts.predict \
     --model_name "eva02-clip-large" \
     --subject_name "all" \
 ```
+
+# Installation
+1. ``git clone https://github.com/suyamat/ScalingVisionEncoder``
+2. ``cd ScalingVisionEncoder``
+3. ``conda create -n scaling_vis_enc python==3.8``
+4. ``conda activate scaling_vis_enc``
+5. ``pip insall -r requirements.txt``
+6. ``echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ``
 
 # Acknowledgement
 Our codes are built upon these repository. We would like to thank the contributors of these great codebases.
