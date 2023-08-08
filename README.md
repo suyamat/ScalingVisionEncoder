@@ -1,10 +1,10 @@
 # Applicability of scaling laws to vision encoding models
-This repository provides codes for solving The Algonauts Project 2023 Challenge. For more information, see our solution paper and the challenge's page.
+This repository provides code for participating in The Algonauts Project 2023 Challenge. For more details, please refer to our solution paper and the challenge's official page.
 
 [[Our paper](https://arxiv.org/abs/2308.00678)]
-[[Challenge website](http://algonauts.csail.mit.edu/)]
+[[The challenge's official page](http://algonauts.csail.mit.edu/)]
 
-# Support models
+# Supported Models
 
 <table class="tg">
 <thead>
@@ -60,19 +60,21 @@ This repository provides codes for solving The Algonauts Project 2023 Challenge.
 
 
 # Installation
-1. ```git clone https://github.com/suyamat/ScalingVisionEncoder```
-2. ```cd ScalingVisionEncoder```
-3. ```conda create -n scaling_vis_enc python==3.8```
-4. ```conda activate scaling_vis_enc```
-5. ```pip insall -r requirements.txt```
-6. ```echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ```
+```
+git clone https://github.com/suyamat/ScalingVisionEncoder
+cd ScalingVisionEncoder
+conda create -n scaling_vis_enc python==3.8
+conda activate scaling_vis_enc
+pip insall -r requirements.txt
+echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env 
+```
 
-# Data preparation
-Place challenge's data to data directory like data/resp/subj01/...
+# Data Preparation
+Place the challenge's data in the data directory, following this structure: data/resp/subj01/...
 
 # Usage
-## Extract vision models' features
-For example, to extract EVA02-CLIP-large' features with 4 GPUs (1 nodes x 4 GPUs), you can run
+## Extract Vision Models' Features
+For instance, to extract features from "EVA02-CLIP-large" with 4 GPUs (1 node x 4 GPUs), you can run
 ```
 python -m encoding.scripts.extract_features \
     --model_name "eva02-clip-large" \
@@ -82,8 +84,8 @@ python -m encoding.scripts.extract_features \
     --batch_size "128"
 ```
 
-## Search hyper-parameters
-For example, to search the optimal combinations of the layer and the kernel size of maxpooling, using all layers, all kernel sizes and 100% of samples, you can run
+## Search for Hyper-Parameters
+For instance, to search for the optimal combination of layer and kernel size for max pooling, utilizing all layers, all kernel sizes, and 100% of the samples, you can run
 ```
 python -m encoding.scripts.search_hparams \
     --model_name "eva02-clip-large" \
@@ -97,7 +99,7 @@ python -m encoding.scripts.search_hparams \
     --use_ratio "1.0"
 ```
 
-## Final predictions
+## Final Predictions
 For example, to make final predictions using EVA02-CLIP-large, you can run
 ```
 python -m encoding.scripts.predict \
@@ -105,16 +107,9 @@ python -m encoding.scripts.predict \
     --subject_name "all" \
 ```
 
-# Installation
-1. ``git clone https://github.com/suyamat/ScalingVisionEncoder``
-2. ``cd ScalingVisionEncoder``
-3. ``conda create -n scaling_vis_enc python==3.8``
-4. ``conda activate scaling_vis_enc``
-5. ``pip insall -r requirements.txt``
-6. ``echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ``
-
 # Acknowledgement
-Our codes are built upon these repository. We would like to thank the contributors of these great codebases.
+Our code is built upon the following repositories. We would like to extend our gratitude to the contributors of these excellent codebases.
+
 > https://github.com/huggingface/pytorch-image-models
 
 > https://github.com/OFA-Sys/ONE-PEACE
