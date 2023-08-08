@@ -12,7 +12,7 @@ This repository provides codes for solving The Algonauts Project 2023 Challenge.
 6. ```echo -e 'DATA_DIR=data\nPYTHONPATH=./' > .env ```
 
 # Usage
-## Extract vision models's features
+## Extract vision models' features
 For example, to extract EVA02-CLIP-large' features with 4 GPUs (1 nodes x 4 GPUs), you can run
 ```
 python -m encoding.scripts.extract_features \
@@ -36,6 +36,14 @@ python -m encoding.scripts.search_hparams \
     --kernel_step "1" \
     --kernel_end "16" \
     --use_ratio "1.0"
+```
+
+## Final predictions
+For example, to make final predictions using EVA02-CLIP-large, you can run
+```
+python -m encoding.scripts.predict \
+    --model_name "eva02-clip-large" \
+    --subject_name "all" \
 ```
 
 # Acknowledgement

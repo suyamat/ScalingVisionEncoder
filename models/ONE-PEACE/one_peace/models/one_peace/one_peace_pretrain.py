@@ -121,62 +121,15 @@ class OnePeacePretrainModel(OnePeaceBaseModel):
             logit_scale_exp = self.logit_scale.exp()
             return logit_scale_exp
         else:
-            enc_text_features, enc_image_features, enc_audio_features = self.encoder_wrapper(
+            enc_image_features = self.encoder_wrapper(
                 src_tokens=src_tokens, text_preserve_ids=text_preserve_ids,
                 src_images=src_images, image_preserve_ids=image_preserve_ids,
                 src_audios=src_audios, audio_padding_masks=audio_padding_masks, audio_preserve_ids=audio_preserve_ids,
                 encoder_type=encoder_type
             )
+            
+            return enc_image_features
 
-            if text_preserve_ids is not None or image_preserve_ids is not None or audio_preserve_ids is not None:
-                text_preserve_embed = self.decoder_text_embed(
-                    enc_text_features) if enc_text_features is not None else None
-                image_preserve_embed = self.decoder_image_embed(
-                    enc_image_features) if enc_image_features is not None else None
-                audio_preserve_embed = self.decoder_audio_embed(
-                    enc_audio_features) if enc_audio_features is not None else None
-                dec_text_features, dec_image_features, dec_audio_features = self.decoder_wrapper(
-                    src_tokens=src_tokens,
-                    text_preserve_ids=text_preserve_ids,
-                    text_preserve_embed=text_preserve_embed,
-                    text_mask_token=self.text_mask_token,
-                    src_images=src_images,
-                    image_preserve_ids=image_preserve_ids,
-                    image_preserve_embed=image_preserve_embed,
-                    image_mask_token=self.image_mask_token,
-                    src_audios=src_audios,
-                    audio_padding_masks=audio_padding_masks,
-                    audio_preserve_ids=audio_preserve_ids,
-                    audio_preserve_embed=audio_preserve_embed,
-                    audio_mask_token=self.audio_mask_token,
-                    encoder_type=encoder_type
-                )
-                dec_text_features = self.text_mask_head(dec_text_features) \
-                    if dec_text_features is not None else None
-                dec_image_features = self.image_mask_head(dec_image_features) \
-                    if dec_image_features is not None else None
-                dec_audio_features = self.audio_mask_head(dec_audio_features) \
-                    if dec_audio_features is not None else None
-                return dec_text_features, dec_image_features, dec_audio_features
-            else:
-                if encoder_type == 'text':
-                    text_cls_logits = enc_text_features[:, 0, :]
-                    text_logits = F.normalize(self.text_proj(text_cls_logits), dim=1)
-                    return text_logits, enc_text_features
-                elif encoder_type == 'image':
-                    image_cls_logits = enc_image_features[:, 0, :]
-                    image_logits = F.normalize(self.image_proj(image_cls_logits), dim=1)
-                    return image_logits, enc_image_features
-                elif encoder_type == 'audio':
-                    audio_cls_logits = enc_audio_features[:, 0, :]
-                    audio_logits = F.normalize(self.audio_proj(audio_cls_logits), dim=1)
-                    return audio_logits, enc_audio_features
-                elif encoder_type == 'vl':
-                    return enc_text_features, enc_image_features
-                elif encoder_type == 'al':
-                    return enc_text_features, enc_audio_features
-                else:
-                    raise NotImplementedError
 
     def upgrade_state_dict_named(self, state_dict, name):
         super().upgrade_state_dict_named(state_dict, name)

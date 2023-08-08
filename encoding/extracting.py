@@ -131,6 +131,11 @@ def inference(
                             m = nn.AdaptiveMaxPool2d((14, 14))
                             pred = pred.permute(0, 3, 1, 2)
                             pred = m(pred)
+                        if model_name == "ONE-PEACE":
+                            pred = model.extract_image_features(img)
+                            pred = pred[l][1:, ...]
+                            pred = pred.reshape(16, 16, pred.shape[1], -1)
+                            pred = pred.permute(2, 3, 0, 1)
                         else:
                             pred = pred[:, 1:, :]
                             pred = pred.reshape(pred.shape[0], spatial_res, spatial_res, -1)

@@ -8,11 +8,11 @@ import argparse
 
 from dotenv import load_dotenv, find_dotenv
 
-from encoding import hparams_searching
+from encoding import predicting
 
 def main(args):
     
-    hparams_searching.searcher(args.model_name, args.subject_name)
+    predicting.searcher(args.model_name, args.subject_name)
     
 
 if __name__ == "__main__":

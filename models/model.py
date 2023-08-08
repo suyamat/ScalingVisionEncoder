@@ -242,36 +242,36 @@ def define_model(model_name, depth) -> object:
         return model
 
     elif model_name=='InternImage':
-            from models.InternImage.classification.models import build_model
-            import yaml
-            from attrdict import AttrDict
-            from models.InternImage.classification import config
-            
-            
-            cfg = config.get_config(None)
-            cfg.TRAIN.USE_CHECKPOINT = True
-            cfg.MODEL.PRETRAINED = True
-            cfg.MODEL.TYPE = "intern_image"
-            cfg.EXTRACT_LAYER = depth
-            config_file = "models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml"
-            config._update_config_from_file(cfg, config_file)
-            # with open('models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml') as f:
-            #     config = yaml.safe_load(f.read())
-            cfg = AttrDict(cfg)
-            print(cfg)
-            model = build_model(cfg)
-            checkpoint = torch.load("./data/checkpoints/internimage_g_22kto1k_512.pth", map_location='cpu')
-            model.load_state_dict(checkpoint['model'], strict=False)
-            model.cuda()
-            return model
+        from models.InternImage.classification.models import build_model
+        import yaml
+        from attrdict import AttrDict
+        from models.InternImage.classification import config
+        
+        
+        cfg = config.get_config(None)
+        cfg.TRAIN.USE_CHECKPOINT = True
+        cfg.MODEL.PRETRAINED = True
+        cfg.MODEL.TYPE = "intern_image"
+        cfg.EXTRACT_LAYER = depth
+        config_file = "models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml"
+        config._update_config_from_file(cfg, config_file)
+        # with open('models/InternImage/classification/configs/internimage_g_22kto1k_512.yaml') as f:
+        #     config = yaml.safe_load(f.read())
+        cfg = AttrDict(cfg)
+        print(cfg)
+        model = build_model(cfg)
+        checkpoint = torch.load("./data/checkpoints/internimage_g_22kto1k_512.pth", map_location='cpu')
+        model.load_state_dict(checkpoint['model'], strict=False)
+        model.cuda()
+        return model
             
     elif model_name=='ONE-PEACE':
-        sys.path.append('/mount/nfs6/takuyamatsuyama/HugeDNNs-Encoding/ONE-PEACE')
-        from one_peace.models import from_pretrained
+        from models.ONE-PEACE.one_peace import models 
 
-        model = from_pretrained("ONE-PEACE", device='cuda:0', dtype="float32")
+        model = models.from_pretrained("ONE-PEACE", device='cuda:0', dtype="float32")
 
-    elif model_name=='imagebind':
+    elif model_name=='ImageBind':
         raise AssertionError(f"Image Bind is in preparation.")
+    
     else:
         raise AssertionError(f"Model name '{model_name}' does not exit")
